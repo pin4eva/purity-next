@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import FrontHeader from "@/components/FrontHeader";
 import ProductItem from "@/components/Product";
 import React from "react";
@@ -217,16 +216,4 @@ const partnersList = [
   "part-9.png",
   "part-10.png",
 ];
-=======
-import React, { Fragment } from "react";
-
-const Home = () => {
-  return (
-    <Fragment>
-      <h1>Hello World</h1>
-    </Fragment>
-  );
-};
-
->>>>>>> 85320bba75292f4f01e9f91dab3620503ce74134
 export default Home;
