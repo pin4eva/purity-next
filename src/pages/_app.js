@@ -1,15 +1,18 @@
-import { ApolloProvider } from "@apollo/client";
+import { ApolloProvider } from "@apollo/react-hooks";
+import { AUTH } from "apollo/queries";
+import App from "next/app";
 import Head from "next/head";
 import Router from "next/router";
 import Nprogress from "nprogress";
 import PropTypes from "prop-types";
 import React, { Fragment } from "react";
-import { RecoilRoot } from "recoil";
+import { Provider } from "react-redux";
 import { ThemeProvider as Styledtheme } from "styled-components";
 import { theme } from "theme";
 import { ThemeProvider } from "theme-ui";
-import { useApollo } from "../apollo";
-import "style/index.scss";
+import { initializeApollo, useApollo } from "../apollo";
+import { initializeStore, useStore } from "../redux";
+import cookies from "next-cookies";
 
 Router.events.on("routeChangeStart", () => {
   // console.log("From nprogress", url);
@@ -18,15 +21,15 @@ Router.events.on("routeChangeStart", () => {
 Router.events.on("routeChangeComplete", () => Nprogress.done());
 Router.events.on("routeChangeError", () => Nprogress.done());
 const MyApp = ({ Component, pageProps }) => {
+  const store = useStore(pageProps.store);
   const apolloClient = useApollo(pageProps.apollo);
-
+  // const user = pageProps.user;
   return (
     <Fragment>
       <Head>
-        <title>Purity Heritage | Purity is our Heritage</title>
         <link rel="stylesheet" href="/nprogress.css" />
       </Head>
-      <RecoilRoot>
+      <Provider store={store}>
         <ApolloProvider client={apolloClient}>
           <ThemeProvider theme={theme}>
             <Styledtheme theme={theme}>
@@ -34,9 +37,46 @@ const MyApp = ({ Component, pageProps }) => {
             </Styledtheme>
           </ThemeProvider>
         </ApolloProvider>
-      </RecoilRoot>
+      </Provider>
     </Fragment>
   );
+};
+
+MyApp.getInitialProps = async (appctx) => {
+  let { ctx } = appctx;
+  const reduxStore = initializeStore();
+  let apolloClient = initializeApollo();
+
+  let token;
+  let user;
+
+  const pageProps = await App.getInitialProps(appctx);
+
+  const accessToken = cookies(ctx) || null;
+  if (accessToken.token) {
+    token = accessToken.token;
+    apolloClient = initializeApollo(null, token);
+
+    try {
+      const { data } = await apolloClient.query({
+        query: AUTH,
+      });
+      if (data) {
+        user = data.auth;
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  return {
+    pageProps: {
+      ...pageProps,
+      store: reduxStore.getState(),
+      apollo: apolloClient.cache.extract(),
+      user,
+    },
+  };
 };
 
 MyApp.propTypes = {
