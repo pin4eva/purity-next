@@ -1,6 +1,37 @@
-body {
-  background-color: $primary !important;
+#__next {
+  width: 100%;
 }
-h1 {
-  color: $success;
+
+#header {
+  .wrapper {
+    position: relative;
+    .mobile-nav {
+      width: auto;
+
+      background: rgba($color: $primary, $alpha: 0.95);
+      position: absolute;
+      right: 0;
+      overflow: hidden;
+      .nav-link {
+        font-size: 1rem;
+        // color: white;
+      }
+      transition: width 0.5s ease-in-out;
+      @media screen and (min-width: 768px) {
+        display: none;
+      }
+    }
+  }
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.top-desc {
+  display: flex;
+  align-items: center;
+  .line {
+    height: 3px;
+  }
 }
