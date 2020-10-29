@@ -80,7 +80,7 @@ const Home = () => {
         <div className="partners container mt-4">
           <div className="top-desc mb-4 ">
             <div className="line bg-success flex-1"></div>
-            <h2 className="mx-4 font-weight-bold">Our clients</h2>
+            <h2 className="mx-4 font-weight-bold">Our Partners</h2>
             <div className="line bg-success flex-1"></div>
           </div>
           <Grid className="partners-logo" columns={[1, 2, 3]}>

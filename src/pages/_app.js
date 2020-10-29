@@ -23,6 +23,7 @@ const MyApp = ({ Component, pageProps }) => {
   return (
     <Fragment>
       <Head>
+        <meta name="yandex-verification" content="a6f06d2d0b7ef24e" />
         <title>Purity Heritage | Purity is our Heritage</title>
         <link rel="stylesheet" href="/nprogress.css" />
       </Head>
